@@ -31,7 +31,7 @@ cmake -S rust -B "$build_dir" -G Ninja \
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL
 
 cmake --build "$build_dir" \
-  --target wow_gameplay_bridge_test
+  --target wow_cooldown_bridge_test
 
-wine "$build_dir/wow_gameplay_bridge_test.exe"
+wine "$build_dir/wow_cooldown_bridge_test.exe"
 CONTAINER

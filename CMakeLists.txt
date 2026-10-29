@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.22)
 
 if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(FATAL_ERROR
@@ -74,6 +74,17 @@ include_directories(${CMAKE_BINARY_DIR}/generated)
 # Third-party code is linked, not decompiled, for now.
 if (EXISTS ${CMAKE_SOURCE_DIR}/ThirdParty/CMakeLists.txt)
     add_subdirectory(ThirdParty)
+endif ()
+
+option(WOWDECOMP_ENABLE_RUST "Enable the Rust gameplay bridge" OFF)
+
+
+if (WOWDECOMP_ENABLE_RUST)
+    if (NOT WOWDECOMP_ARCH_64)
+        message(FATAL_ERROR "Rust gameplay integration requires x64.")
+    endif ()
+
+    add_subdirectory(rust)
 endif ()
 
 add_subdirectory(Engine/Source/BLPFile)

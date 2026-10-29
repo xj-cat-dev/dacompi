@@ -38,7 +38,7 @@ parts of FMOD Ex).
 
 - Windows 10 or 11
 - Visual Studio 2022 with the **Desktop development with C++** workload (MSVC v143 and a Windows SDK)
-- CMake 3.10 or newer (the one that ships with Visual Studio works)
+- CMake 3.22 or newer (the one that ships with Visual Studio works)
 - For Win32 builds only: [NASM](https://www.nasm.us/), on `PATH` or passed as `-DNASM_EXECUTABLE=<path>`, and
   `DivxDecoder.dll` from your 3.3.5a client copied to `ThirdParty/DivxDecoder/` (the build copies it next to the
   executables; the x64 build uses its own decoder instead)

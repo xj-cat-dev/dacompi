@@ -22,7 +22,18 @@ corrosion_add_cxxbridge(wow_gameplay_bridge
 )
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    add_executable(wow_gameplay_bridge_test bridge_test.cpp)
-    target_compile_features(wow_gameplay_bridge_test PRIVATE cxx_std_17)
-    target_link_libraries(wow_gameplay_bridge_test PRIVATE wow_gameplay_bridge)
+    include(CTest)
+
+    if(BUILD_TESTING)
+        add_executable(wow_cooldown_bridge_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/../tests/gameplay/cooldown_bridge_test.cpp"
+        )
+        target_compile_features(wow_cooldown_bridge_test PRIVATE cxx_std_17)
+        target_link_libraries(wow_cooldown_bridge_test PRIVATE wow_gameplay_bridge)
+
+        add_test(
+            NAME gameplay.cooldown_bridge
+            COMMAND wow_cooldown_bridge_test
+        )
+    endif()
 endif()

@@ -26,6 +26,8 @@ build_dir=out/build/docker-win64
 
 cmake -S . -B "$build_dir" -G Ninja \
   -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE_x86_64_pc_windows_msvc" \
+  -DWOWDECOMP_ENABLE_RUST=ON \
+  -DRust_CARGO_TARGET=x86_64-pc-windows-msvc \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW \
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL

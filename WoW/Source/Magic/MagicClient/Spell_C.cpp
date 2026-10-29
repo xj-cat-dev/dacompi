@@ -98,6 +98,10 @@
 #include <alloca.h>
 #endif
 
+#if defined(WOWDECOMP_ENABLE_RUST)
+#include "wow_gameplay_bridge/lib.h"
+#endif
+
 // STATIC: 0x00D3F5AC
 static SpellHistory s_spellHistory[2];
 
@@ -3170,7 +3174,19 @@ bool SpellHistory::GetSpellCooldown(int32_t spellId, int32_t itemId, uint32_t* d
         if (history->m_spellId == spellId && history->m_itemId == itemId && (history->m_recoveryTime || history->m_onHold)) {
             uint32_t end = history->m_recoveryTime + (history->m_onHold ? now + 1 : history->m_time);
 
-            if (static_cast<int32_t>(end - latest) >= 0) {
+            const bool cppSelect = static_cast<int32_t>(end - latest) >= 0;
+            #if defined (WOWDECOMP_ENABLE_RUST)
+            const bool rustSelect = wow::gameplay::ends_at_or_after(end, latest);
+
+            if (rustSelect != cppSelect) {
+                ConsolePrintf(
+                    "Rust cooldown mismatch: spell=%d item=%d end=%u latest=%u cpp=%d rust=%d",
+                    spellId, itemId, end, latest, cppSelect, rustSelect
+                );
+            }
+            #endif
+
+            if (cppSelect) {
                 if (duration) {
                     *duration = history->m_onHold ? 1 : history->m_recoveryTime;
                 }
