@@ -90,10 +90,11 @@ struct SpellInTransit : public TSLinkedNode<SpellInTransit> {
 };
 
 class SpellHistory {
-    public:
+    private:
     /* 0000 */ TSList<SPELLHISTORY, TSGetLink<SPELLHISTORY>> m_history;
     /* 000C */ TSList<SPELLHISTORY, TSGetLink<SPELLHISTORY>> m_free;
 
+    public:
     ~SpellHistory();
     int32_t IsOnHold(int32_t spellId, int32_t itemId);
     void AddHistory(int32_t spellId, int32_t itemId, uint32_t time, uint32_t recoveryTime, int32_t category, uint32_t categoryTime, uint32_t categoryRecoveryTime, bool onHold, int32_t startRecoveryCategory, uint32_t startRecoveryTime);

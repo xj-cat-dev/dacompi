@@ -5674,26 +5674,7 @@ int32_t Packet_SMSG_ITEM_COOLDOWN(void* param, NETMESSAGE msgId, uint32_t time, 
 
         if (item) {
             int32_t itemId = item->m_obj->m_entryID;
-            SpellHistory& history = s_spellHistory[0];
-            SPELLHISTORY* entry = history.m_free.Head();
-
-            if (entry) {
-                history.m_free.UnlinkNode(entry);
-                history.m_history.LinkToTail(entry);
-            } else {
-                entry = history.m_history.NewNode(2, 0, 8);
-            }
-
-            entry->m_spellId = spellId;
-            entry->m_itemId = itemId;
-            entry->m_time = time;
-            entry->m_recoveryTime = 30000;
-            entry->m_category = 0;
-            entry->m_categoryTime = 0;
-            entry->m_categoryRecoveryTime = 0;
-            entry->m_onHold = false;
-            entry->m_startRecoveryCategory = 0;
-            entry->m_startRecoveryTime = 0;
+            s_spellHistory[0].AddHistory(spellId, itemId, time, 30000, 0, 0, 0, false, 0, 0);
         }
     }
 
@@ -6036,26 +6017,7 @@ void Spell_C_SetCooldownLeft(int32_t spellId, uint32_t itemId, uint32_t category
     }
 
     if (recovery || categoryRecovery || onHold) {
-        SpellHistory& history = s_spellHistory[pet];
-        SPELLHISTORY* entry = history.m_free.Head();
-
-        if (entry) {
-            history.m_free.UnlinkNode(entry);
-            history.m_history.LinkToTail(entry);
-        } else {
-            entry = history.m_history.NewNode(2, 0, 8);
-        }
-
-        entry->m_spellId = spellId;
-        entry->m_itemId = itemId;
-        entry->m_time = time;
-        entry->m_recoveryTime = recovery;
-        entry->m_category = category;
-        entry->m_categoryTime = categoryTime;
-        entry->m_categoryRecoveryTime = categoryRecovery;
-        entry->m_onHold = onHold;
-        entry->m_startRecoveryCategory = 0;
-        entry->m_startRecoveryTime = 0;
+        s_spellHistory[pet].AddHistory(spellId, itemId, time, recovery, category, categoryTime, categoryRecovery, onHold, 0, 0);
     }
 }
 
@@ -6752,26 +6714,12 @@ void Spell_C_PendingItemCooldownCallback(int32_t id, const WOWGUID& guid, void* 
                 uint32_t time = node->m_time;
 
                 if (recovery || categoryRecovery || onHold) {
-                    SpellHistory& history = s_spellHistory[0];
-                    SPELLHISTORY* entry = history.m_free.Head();
-
-                    if (entry) {
-                        history.m_free.UnlinkNode(entry);
-                        history.m_history.LinkToTail(entry);
-                    } else {
-                        entry = history.m_history.NewNode(2, 0, 8);
-                    }
-
-                    entry->m_spellId = spellId;
-                    entry->m_itemId = id;
-                    entry->m_time = time;
-                    entry->m_recoveryTime = recovery;
-                    entry->m_category = category;
-                    entry->m_categoryTime = time;
-                    entry->m_categoryRecoveryTime = categoryRecovery;
-                    entry->m_onHold = onHold;
-                    entry->m_startRecoveryCategory = 0;
-                    entry->m_startRecoveryTime = 0;
+                    s_spellHistory[0].AddHistory(
+                        spellId, id,
+                        time, recovery,
+                        category, time, categoryRecovery,
+                        onHold, 0, 0
+                    );
                 }
             }
         }

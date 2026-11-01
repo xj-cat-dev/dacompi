@@ -3,6 +3,9 @@
 #include <iostream>
 
 int main() {
+    {
+        auto history = wow::gameplay::new_cooldown_history();
+    }
   const bool later = wow::gameplay::ends_at_or_after(1200, 1000);
   const bool earlier = wow::gameplay::ends_at_or_after(800, 1000);
 
